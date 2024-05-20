@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable,  BadRequestException } from '@nestjs/common';
+import { Injectable,  BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Socio } from './entities/socio2/socio2.entity';
@@ -17,7 +17,7 @@ export class SocioService {
   }
 
   findOne(id: number): Promise<Socio> {
-    return this.socioRepository.findOneBy({ id });
+    return this.socioRepository.findOne({ where: { id } });
   }
 
   async create(socioData: Partial<Socio>): Promise<Socio> {
@@ -27,15 +27,19 @@ export class SocioService {
     const socio = this.socioRepository.create(socioData);
     return this.socioRepository.save(socio);
   }
+  
 
   async update(id: number, socioData: Partial<Socio>): Promise<Socio> {
-    const socio = await this.findOne(id);
-    if (!this.isValidEmail(socioData.email)) {
+    const socio = await this.socioRepository.findOne({ where: { id } });
+    if (!socio) {
+      throw new NotFoundException('Socio no encontrado');
+    }
+    if (socioData.email && !this.isValidEmail(socioData.email)) {
       throw new BadRequestException('Correo electrónico no válido');
     }
-    this.socioRepository.merge(socio, socioData);
-    return this.socioRepository.save(socio);
+    return this.socioRepository.save({ ...socio, ...socioData });
   }
+  
 
   async remove(id: number): Promise<void> {
     const socio = await this.findOne(id);
@@ -44,5 +48,5 @@ export class SocioService {
 
   private isValidEmail(email: string): boolean {
     return email.includes('@');
-  }
+  }  
 }

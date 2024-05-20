@@ -20,6 +20,6 @@ export class Club {
   @Column({ length: 100 })
   description: string;
 
-  @ManyToMany(() => Socio, socio => socio.clubs) // Muchos clubs pueden tener muchos socios
+  @ManyToMany(() => Socio, socio => socio.clubs) 
   socios: Socio[];
 }

@@ -11,9 +11,9 @@ import { Socio } from './socio2/entities/socio2/socio2.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
+      port: 5432,
       username: 'test',
       password: 'test',
       database: 'test',

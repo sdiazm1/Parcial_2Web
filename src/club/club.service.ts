@@ -16,7 +16,7 @@ export class ClubService {
   }
 
   async findOne(id: number): Promise<Club> {
-    const club = await this.clubRepository.findOneBy({ id });
+    const club = await this.clubRepository.findOne({ where: { id } });
     if (!club) {
       throw new NotFoundException('Club no encontrado');
     }
@@ -24,20 +24,20 @@ export class ClubService {
   }
 
   async create(clubData: Partial<Club>): Promise<Club> {
-    if (clubData.description.length > 100) {
+    if (clubData.description && clubData.description.length > 100) {
       throw new BadRequestException('La descripción no puede superar los 100 caracteres');
     }
     const club = this.clubRepository.create(clubData);
     return this.clubRepository.save(club);
   }
+  
 
   async update(id: number, clubData: Partial<Club>): Promise<Club> {
     const club = await this.findOne(id);
-    if (clubData.description.length > 100) {
+    if (clubData.description && clubData.description.length > 100) {
       throw new BadRequestException('La descripción no puede superar los 100 caracteres');
     }
-    this.clubRepository.merge(club, clubData);
-    return this.clubRepository.save(club);
+    return this.clubRepository.save({ ...club, ...clubData });
   }
 
   async remove(id: number): Promise<void> {

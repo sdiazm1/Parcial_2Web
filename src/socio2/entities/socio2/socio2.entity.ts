@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
-import { Club } from 'src/club/entities/club/club.entity'; 
+import { Club } from "src/club/entities/club/club.entity"; 
 
 @Entity()
 export class Socio {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; 
 
   @Column()
   username: string;

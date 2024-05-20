@@ -3,7 +3,7 @@ import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common'
 import { ClubService } from './club.service';
 import { Club } from './entities/club/club.entity';
 
-@Controller('club')
+@Controller('clubs') // Ruta base para los endpoints de club
 export class ClubController {
   constructor(private readonly clubService: ClubService) {}
 
@@ -32,3 +32,4 @@ export class ClubController {
     return this.clubService.remove(+id);
   }
 }
+
